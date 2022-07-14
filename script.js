@@ -1,5 +1,5 @@
 let myLibrary = [];
-const remove_buttons = null;
+let remove_buttons = null;
 
 // constructor
 function Book(title = '', author = '', pages = '', status = false) {
@@ -130,3 +130,17 @@ remove_buttons.forEach(button => {
         removeBook(index);
     })
 });
+
+// exit pop-up when clicked on grey area
+const pop_up_background = document.querySelector('.pop-up-background');
+
+pop_up_background.onclick = (e) => {
+    if(e.target.className === 'pop-up-background')
+        pop_up_background.style.display = "none";
+}
+
+// close modal when pressing Esc key
+document.onkeydown = (e) => {
+    if(e.key === 'Escape')
+        pop_up_background.style.display = "none";
+}
