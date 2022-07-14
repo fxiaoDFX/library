@@ -13,7 +13,7 @@
         <h1>My Library</h1>
     </div>
     <div class="library-container">
-        <button>Add Book</button>
+        <button class="new-book">Add Book</button>
         <div class="book-shelf">
             <div class="card">
                 <p class="title">Harry Potter</p>
@@ -25,6 +25,21 @@
                     <button class="remove">Remove</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="pop-up-background">
+        <div id="pop-up">
+            <h3>Enter book information</h3>
+            <form>
+                <input type="text" name="title" placeholder="Title" id="title" required>
+                <input type="text" name="author" placeholder="Author" id="author">
+                <input type="number" name="pages" placeholder="# of pages" id="pages">
+                <div>
+                    <label for="read">Read?</label>
+                    <input type="checkbox" name="read-status" id="read" value="read">
+                </div>
+                <button type="submit">Submit</button>
+            </form>
         </div>
     </div>
     <div class="footer">Copyright 2022</div>
