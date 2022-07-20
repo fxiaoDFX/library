@@ -2,18 +2,18 @@ let myLibrary = [];
 let remove_buttons = null;
 
 // constructor
-function Book(title = '', author = '', pages = '', status = false) {
+function Book(title = '', author = '', pages = '', status = 'not read') {
     const index = null;
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.status= status;
+    this.status = status;
 }
 
 /**
  * add Book to array and set its index property
  */
-Book.prototype.addBookToLibrary = function() {
+Book.prototype.addBookToLibrary = function () {
     this.index = myLibrary.length;
     myLibrary.push(this);
 }
@@ -22,13 +22,16 @@ Book.prototype.addBookToLibrary = function() {
  * change read status of Book
  */
 Book.prototype.changeStatus = function (status) {
-    this.status = status;
+    if (status === 'read')
+        this.status = 'not read';
+    else
+        this.status = 'read';
 }
 
 /**
  * Brings popup menu where current book info is displayed and can be modified
  */
- Book.prototype.editBook = function() {
+Book.prototype.editBook = function () {
 
 }
 
@@ -45,7 +48,7 @@ function removeBook(index) {
  * fix index values of book objects in array and div#id
  */
 function fixIndex() {
-    for(let i = 0; i < myLibrary.length; i++){
+    for (let i = 0; i < myLibrary.length; i++) {
         const target = document.getElementById(myLibrary[i].index);
         target.id = i;
         myLibrary[i].index = i;
@@ -55,7 +58,7 @@ function fixIndex() {
 /**
  * iterates through array and displays each element
  */
-function displayLibrary(){
+function displayLibrary() {
     myLibrary.forEach(book => {
         createCard(book);
     });
@@ -63,9 +66,17 @@ function displayLibrary(){
 }
 
 /**
+ * display new book
+ */
+function updateDisplay() {
+    createCard(myLibrary[myLibrary.length - 1]);
+    remove_buttons = document.querySelectorAll('button.remove');
+}
+
+/**
  * takes information for card and create card element
  */
-function createCard(book){
+function createCard(book) {
     // create elements to be appended to document
     const div_card = document.createElement('div');
     const p_title = document.createElement('p');
@@ -86,7 +97,7 @@ function createCard(book){
     button_container.classList.add('button-container');
     button_edit.classList.add('edit');
     button_remove.classList.add('remove');
-    
+
     // add text to elements
     p_title.innerText = book.title;
     p_author.innerText = book.author;
@@ -107,14 +118,6 @@ function createCard(book){
  */
 const index = (id) => myLibrary.map(object => object.index).indexOf(id);
 
-// TEST
-const book1 = new Book('harry potter', 'J.K. Rowling');
-const book2 = new Book();
-const book3 = new Book('apple');
-book1.addBookToLibrary();
-book2.addBookToLibrary();
-book3.addBookToLibrary();
-
 // TODO: event listeners for buttons
 // when clicking add book button, create a menu that enables user to enter in book info. Once done, display that book and allow that book to be delete for edited later.  
 displayLibrary();
@@ -131,16 +134,29 @@ remove_buttons.forEach(button => {
     })
 });
 
-// exit pop-up when clicked on grey area
-const pop_up_background = document.querySelector('.pop-up-background');
+// modal interactions
+const open = document.getElementById('open');
+const modal_container = document.getElementById('modal-container');
+const submit = document.getElementById('submit');
 
-pop_up_background.onclick = (e) => {
-    if(e.target.className === 'pop-up-background')
-        pop_up_background.style.display = "none";
+open.onclick = () => {
+    modal_container.classList.add('show');
 }
 
-// close modal when pressing Esc key
-document.onkeydown = (e) => {
-    if(e.key === 'Escape')
-        pop_up_background.style.display = "none";
+submit.onclick = () => {
+    const title = document.getElementById('title');
+    const pages = document.getElementById('pages');
+    const author = document.getElementById('author');
+
+    if(title.checkValidity() && pages.checkValidity() ){
+        console.log(title.value);
+        console.log(author.value);
+        console.log(pages.value);
+        modal_container.classList.remove('show');
+        const newBook = new Book(title.value, author.value, pages.value);
+        newBook.addBookToLibrary();
+        updateDisplay();
+    }
+    else
+        console.log('please fill in title field');
 }

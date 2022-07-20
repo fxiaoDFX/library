@@ -13,7 +13,7 @@
         <h1>My Library</h1>
     </div>
     <div class="library-container">
-        <button class="new-book">Add Book</button>
+        <button id="open">Add Book</button>
         <div class="book-shelf">
             <div class="card">
                 <p class="title">Harry Potter</p>
@@ -27,18 +27,18 @@
             </div>
         </div>
     </div>
-    <div class="pop-up-background">
-        <div id="pop-up">
+    <div class="modal-container" id="modal-container">
+        <div class="modal">
             <h3>Enter book information</h3>
             <form>
-                <input type="text" name="title" placeholder="Title" id="title" required>
-                <input type="text" name="author" placeholder="Author" id="author">
-                <input type="number" name="pages" placeholder="# of pages" id="pages">
+                <input id="title" type="text" placeholder="title" required>
+                <input id="author" type="text" placeholder="author">
+                <input id="pages" type="number" placeholder="number of pages">
                 <div>
                     <label for="read">Read?</label>
                     <input type="checkbox" name="read-status" id="read" value="read">
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" id="submit">Submit</button>
             </form>
         </div>
     </div>
