@@ -25,9 +25,16 @@ body {
 }
 
 .library-container button {
-    justify-self: center;
-    width: max-content;
     margin: 15px;
+    padding: 4px;
+    width: 48px;
+    height: auto;
+}
+
+.library-edit {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
 }
 
 .book-shelf {

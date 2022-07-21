@@ -1,5 +1,4 @@
 let myLibrary = [];
-let remove_buttons = null;
 
 // constructor
 function Book(title = '', author = '', pages = '', status = 'not read') {
@@ -56,22 +55,28 @@ function fixIndex() {
 }
 
 /**
- * iterates through array and displays each element
+ * Updates display depending on option
+ * @param {number} option The option to evoke.
  */
-function displayLibrary() {
-    myLibrary.forEach(book => {
-        createCard(book);
-    });
-    remove_buttons = document.querySelectorAll('button.remove');
+function displayLibrary(option) {
+    // display whole myLibrary
+    if (option === 1) {
+        myLibrary.forEach(book => createCard(book));
+    }
+    // display newly added book
+    if (option === 2) {
+        createCard(myLibrary[myLibrary.length - 1]);
+    }
+    // append edit
+
+    // append remove
+    if (option === 4){
+        const cards = document.querySelectorAll('card');
+        const del_button = document.createElement('button');
+        del_button.textContent = 'Delete';
+    }
 }
 
-/**
- * display new book
- */
-function updateDisplay() {
-    createCard(myLibrary[myLibrary.length - 1]);
-    remove_buttons = document.querySelectorAll('button.remove');
-}
 
 /**
  * takes information for card and create card element
@@ -84,8 +89,6 @@ function createCard(book) {
     const p_pages = document.createElement('p');
     const div_status = document.createElement('div');
     const button_container = document.createElement('div');
-    const button_edit = document.createElement('button');
-    const button_remove = document.createElement('button');
 
     // add class names to elements
     div_card.classList.add('card');
@@ -95,19 +98,14 @@ function createCard(book) {
     p_pages.classList.add('pages');
     div_status.classList.add('status');
     button_container.classList.add('button-container');
-    button_edit.classList.add('edit');
-    button_remove.classList.add('remove');
 
     // add text to elements
     p_title.innerText = book.title;
     p_author.innerText = book.author;
     p_pages.innerText = book.pages
     div_status.innerText = book.status;
-    button_edit.innerText = 'Edit';
-    button_remove.innerText = 'Remove';
 
     // append elements to document
-    button_container.append(button_edit, button_remove);
     div_card.append(p_title, p_author, p_pages, div_status, button_container);
     const book_shelf = document.querySelector('.book-shelf');
     book_shelf.appendChild(div_card);
@@ -122,19 +120,9 @@ const index = (id) => myLibrary.map(object => object.index).indexOf(id);
 // when clicking add book button, create a menu that enables user to enter in book info. Once done, display that book and allow that book to be delete for edited later.  
 displayLibrary();
 
-remove_buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        const target = button.closest('.card');
-        const targetID = target.id;
-        target.remove();
-
-        // TODO: remove book from myLibrary
-        const index = parseInt(targetID);
-        removeBook(index);
-    })
-});
-
 // modal interactions
+
+/* add book button */
 const open = document.getElementById('open');
 const modal_container = document.getElementById('modal-container');
 const submit = document.getElementById('submit');
@@ -148,7 +136,7 @@ submit.onclick = () => {
     const pages = document.getElementById('pages');
     const author = document.getElementById('author');
 
-    if(title.checkValidity() && pages.checkValidity() ){
+    if (title.checkValidity() && pages.checkValidity()) {
         console.log(title.value);
         console.log(author.value);
         console.log(pages.value);
@@ -159,4 +147,13 @@ submit.onclick = () => {
     }
     else
         console.log('please fill in title field');
+}
+
+/* delete button */
+const del = document.getElementById('delete');
+const library_container = document.querySelector('.library-container');
+
+del.onclick = () => {
+    library_container.classList.add('dim');
+    
 }
