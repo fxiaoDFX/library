@@ -1,4 +1,5 @@
 let myLibrary = [];
+let delete_mode = false;
 
 // constructor
 function Book(title = '', author = '', pages = '', status = 'not read') {
@@ -28,13 +29,6 @@ Book.prototype.changeStatus = function (status) {
 }
 
 /**
- * Brings popup menu where current book info is displayed and can be modified
- */
-Book.prototype.editBook = function () {
-
-}
-
-/**
  * remove Book from array 
 */
 function removeBook(index) {
@@ -59,22 +53,8 @@ function fixIndex() {
  * @param {number} option The option to evoke.
  */
 function displayLibrary(option) {
-    // display whole myLibrary
-    if (option === 1) {
-        myLibrary.forEach(book => createCard(book));
-    }
-    // display newly added book
-    if (option === 2) {
+    if (option === 2)
         createCard(myLibrary[myLibrary.length - 1]);
-    }
-    // append edit
-
-    // append remove
-    if (option === 4){
-        const cards = document.querySelectorAll('card');
-        const del_button = document.createElement('button');
-        del_button.textContent = 'Delete';
-    }
 }
 
 
@@ -88,7 +68,6 @@ function createCard(book) {
     const p_author = document.createElement('p');
     const p_pages = document.createElement('p');
     const div_status = document.createElement('div');
-    const button_container = document.createElement('div');
 
     // add class names to elements
     div_card.classList.add('card');
@@ -97,7 +76,6 @@ function createCard(book) {
     p_author.classList.add('author');
     p_pages.classList.add('pages');
     div_status.classList.add('status');
-    button_container.classList.add('button-container');
 
     // add text to elements
     p_title.innerText = book.title;
@@ -106,7 +84,7 @@ function createCard(book) {
     div_status.innerText = book.status;
 
     // append elements to document
-    div_card.append(p_title, p_author, p_pages, div_status, button_container);
+    div_card.append(p_title, p_author, p_pages, div_status);
     const book_shelf = document.querySelector('.book-shelf');
     book_shelf.appendChild(div_card);
 }
@@ -118,9 +96,7 @@ const index = (id) => myLibrary.map(object => object.index).indexOf(id);
 
 // TODO: event listeners for buttons
 // when clicking add book button, create a menu that enables user to enter in book info. Once done, display that book and allow that book to be delete for edited later.  
-displayLibrary();
-
-// modal interactions
+displayLibrary(1);
 
 /* add book button */
 const open = document.getElementById('open');
@@ -128,7 +104,12 @@ const modal_container = document.getElementById('modal-container');
 const submit = document.getElementById('submit');
 
 open.onclick = () => {
-    modal_container.classList.add('show');
+    // prevent modal from showing if user is in delete mode
+    if (delete_mode === true) {
+        console.log('in delete mode');
+    } 
+    else
+        modal_container.classList.add('show');
 }
 
 submit.onclick = () => {
@@ -143,17 +124,54 @@ submit.onclick = () => {
         modal_container.classList.remove('show');
         const newBook = new Book(title.value, author.value, pages.value);
         newBook.addBookToLibrary();
-        updateDisplay();
+        displayLibrary(2);
     }
     else
         console.log('please fill in title field');
 }
 
-/* delete button */
-const del = document.getElementById('delete');
-const library_container = document.querySelector('.library-container');
+// trash button
+const trash = document.getElementById('delete');
+let delete_buttons = null;
 
-del.onclick = () => {
-    library_container.classList.add('dim');
-    
+trash.onclick = () => {
+    const delete_button = document.getElementById('trash-icon');
+    delete_button.src = './images/close-circle.svg';
+
+    if (delete_mode === true) {
+        delete_buttons.forEach(button => {
+            button.remove();
+        })
+        delete_button.src = './images/delete.svg';
+        delete_mode = false;
+    } else {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const button = document.createElement('button');
+            button.classList.add('delete');
+            button.innerText = 'Delete';
+            card.append(button);
+        });
+        console.log('what');
+        delete_buttons = document.querySelectorAll('.delete');
+
+        delete_buttons.forEach(button => {
+            button.onclick = (e) => {
+                let index = getCardIndex(e.target);
+                let parent = getParent(e.target);
+                parent.remove();
+                removeBook(index);
+                fixIndex();
+            }
+        })
+        delete_mode = true;
+    }
+}
+
+function getParent(child) {
+    return child.parentNode;
+}
+
+function getCardIndex(childNode) {
+    return childNode.parentNode.id;
 }
