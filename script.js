@@ -23,7 +23,20 @@ Book.prototype.addBookToLibrary = function () {
 /**
  * change read status of Book
  */
-
+function changeStatus() {
+    readButtons = document.querySelectorAll('.status');
+    readButtons.forEach(button => {
+        button.onclick = (e) => {
+            let cardIndex = getCardIndex(e.target);
+            let currentStatus = (myLibrary[cardIndex].status);
+            if(currentStatus === 'Read')
+                myLibrary[cardIndex].status = 'Not read';
+            else
+                myLibrary[cardIndex].status = 'Read';
+            button.innerText = myLibrary[cardIndex].status;
+        }
+    })
+}
 
 /**
  * remove Book from array 
@@ -51,18 +64,7 @@ function fixIndex() {
  */
 function displayLibrary() {
     createCard(myLibrary[myLibrary.length - 1]);
-    readButtons = document.querySelectorAll('.status');
-    readButtons.forEach(button => {
-        button.onclick = (e) => {
-            let cardIndex = getCardIndex(e.target);
-            let currentStatus = (myLibrary[cardIndex].status);
-            if(currentStatus === 'Read')
-                myLibrary[cardIndex].status = 'Not read';
-            else
-                myLibrary[cardIndex].status = 'Read';
-            button.innerText = myLibrary[cardIndex].status;
-        }
-    })
+    changeStatus();
 }
 
 
