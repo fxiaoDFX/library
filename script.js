@@ -2,8 +2,8 @@ let myLibrary = [];
 let delete_mode = false;
 let delete_buttons = null;
 const trash = document.getElementById('delete');
+let readButtons = null;
 
-// constructor
 function Book(title = '', author = '', pages = '', status) {
     let index = null;
     this.title = title;
@@ -23,12 +23,7 @@ Book.prototype.addBookToLibrary = function () {
 /**
  * change read status of Book
  */
-Book.prototype.changeStatus = function (status) {
-    if (status === 'read')
-        this.status = 'not read';
-    else
-        this.status = 'read';
-}
+
 
 /**
  * remove Book from array 
@@ -56,6 +51,18 @@ function fixIndex() {
  */
 function displayLibrary() {
     createCard(myLibrary[myLibrary.length - 1]);
+    readButtons = document.querySelectorAll('.status');
+    readButtons.forEach(button => {
+        button.onclick = (e) => {
+            let cardIndex = getCardIndex(e.target);
+            let currentStatus = (myLibrary[cardIndex].status);
+            if(currentStatus === 'Read')
+                myLibrary[cardIndex].status = 'Not read';
+            else
+                myLibrary[cardIndex].status = 'Read';
+            button.innerText = myLibrary[cardIndex].status;
+        }
+    })
 }
 
 
@@ -68,23 +75,23 @@ function createCard(book) {
     const p_title = document.createElement('p');
     const p_author = document.createElement('p');
     const p_pages = document.createElement('p');
-    const p_status = document.createElement('p');
+    const button_status = document.createElement('button');
 
     // add class names to elements
     div_card.classList.add('card');
     p_title.classList.add('title');
     p_author.classList.add('author');
     p_pages.classList.add('pages');
-    p_status.classList.add('status');
+    button_status.classList.add('status');
 
     // add text to elements
     p_title.innerText = book.title;
     p_author.innerText = book.author;
     p_pages.innerText = book.pages
-    p_status.innerText = book.status;
+    button_status.innerText = book.status;
 
     // append elements to document
-    div_card.append(p_title, p_author, p_pages, p_status);
+    div_card.append(p_title, p_author, p_pages, button_status);
     const book_shelf = document.querySelector('.book-shelf');
     book_shelf.appendChild(div_card);
 }
@@ -100,7 +107,7 @@ const addBook = document.getElementById('add');
 open.onclick = () => {
     // prevent modal from showing if user is in delete mode
     if (delete_mode === true) {
-        console.log('in delete mode');
+        alert('Please close out of delete mode.');
     } 
     else
         modal_container.classList.add('show');
@@ -120,8 +127,8 @@ addBook.onclick = () => {
         modal_container.classList.remove('show');
         displayLibrary();
     }
-    else
-        console.log('please fill in title field');
+    else 
+        alert('Title field is required.\nNumber of pages must be a value greater than 1, otherwise leave blank.')
 }
 
 // close modal with esc key
@@ -190,3 +197,4 @@ function getParent(child) {
 function getCardIndex(childNode) {
     return childNode.parentNode.id;
 }
+
