@@ -22,16 +22,16 @@
     <div class="modal-container" id="modal-container">
         <div class="modal">
             <h3>Enter book information</h3>
-            <form>
+            <div class="form">
                 <input id="title" type="text" placeholder="title" required>
                 <input id="author" type="text" placeholder="author">
-                <input id="pages" type="number" placeholder="number of pages">
+                <input id="pages" type="number" placeholder="number of pages" min="1">
                 <div>
-                    <label for="read">Read?</label>
-                    <input type="checkbox" name="read-status" id="read" value="read">
+                    <label for="status">Read?</label>
+                    <input type="checkbox" id="status">
                 </div>
-                <button type="submit" id="submit">Submit</button>
-            </form>
+                <button id="add">Add</button>
+            </div>
         </div>
     </div>
     <div class="footer">Copyright 2022</div>
