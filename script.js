@@ -4,42 +4,44 @@ let delete_buttons = null;
 const trash = document.getElementById('delete');
 let readButtons = null;
 
-function Book(title = '', author = '', pages = '', status) {
-    let index = null;
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.status = status;
+class Book {
+    constructor(title, author, pages, status) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.status = status;
+        let index = null;
+    }
+
+    /**
+    * add Book to array and set its index property
+    */
+    addBookToLibrary() {
+        this.index = myLibrary.length;
+        myLibrary.push(this);
+    }
 }
 
 /**
- * add Book to array and set its index property
- */
-Book.prototype.addBookToLibrary = function () {
-    this.index = myLibrary.length;
-    myLibrary.push(this);
-}
-
-/**
- * change read status of Book
- */
+* change read status of Book
+*/
 function changeStatus() {
     readButtons = document.querySelectorAll('.status');
     readButtons.forEach(button => {
         button.onclick = (e) => {
             let cardIndex = getCardIndex(e.target);
             let currentStatus = (myLibrary[cardIndex].status);
-            if(currentStatus === 'Read')
+            if (currentStatus === 'Read')
                 myLibrary[cardIndex].status = 'Not read';
             else
                 myLibrary[cardIndex].status = 'Read';
             button.innerText = myLibrary[cardIndex].status;
         }
-    })
+    });
 }
 
 /**
- * remove Book from array 
+* remove Book from array 
 */
 function removeBook(target) {
     myLibrary = myLibrary.filter(book => book.index != target);
@@ -73,7 +75,7 @@ function displayLibrary() {
  */
 function createCard(book) {
     // create elements to be appended to document
-    const div_card = document.createElement('div');div_card.setAttribute('id', book.index);
+    const div_card = document.createElement('div'); div_card.setAttribute('id', book.index);
     const p_title = document.createElement('p');
     const p_author = document.createElement('p');
     const p_pages = document.createElement('p');
@@ -110,7 +112,7 @@ open.onclick = () => {
     // prevent modal from showing if user is in delete mode
     if (delete_mode === true) {
         alert('Please close out of delete mode.');
-    } 
+    }
     else
         modal_container.classList.add('show');
 }
@@ -129,13 +131,13 @@ addBook.onclick = () => {
         modal_container.classList.remove('show');
         displayLibrary();
     }
-    else 
+    else
         alert('Title field is required.\nNumber of pages must be a value greater than 1, otherwise leave blank.')
 }
 
 // close modal with esc key
-document.addEventListener('keydown',(e) => {
-    if(e.key === "Escape") {
+document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape") {
         modal_container.classList.remove('show');
         console.log('close modal');
     }
@@ -148,8 +150,6 @@ modal_container.onclick = (e) => {
 }
 
 // trash button
-
-
 trash.onclick = () => {
     const trash_button = document.getElementById('trash-icon');
     trash_button.src = './images/close-circle.svg';
